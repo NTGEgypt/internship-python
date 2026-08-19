@@ -8,3 +8,7 @@ pytesseract
 ultralytics
 streamlit
 mysql-connector-python
+fastapi
+uvicorn[standard]
+python-multipart
+python-dotenv

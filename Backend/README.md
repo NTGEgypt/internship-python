@@ -40,6 +40,39 @@ pip install -r requirements.txt
 python main.py path/to/id_card.jpg
 ```
 
+## Mobile API
+
+Start the API from the `Backend` directory:
+
+```bash
+uvicorn api:app --host 0.0.0.0 --port 8000
+```
+
+The mobile app should send a `multipart/form-data` request with an `image`
+field containing a JPEG or PNG (maximum 15 MB):
+
+```text
+POST /api/v1/ocr/process
+```
+
+The backend processes the image and saves the original upload and OCR result
+to MySQL before replying. On success it returns HTTP `200`, a database
+submission ID, and the OCR response:
+
+```json
+{
+  "success": true,
+  "submission_id": 42,
+  "result": { "national_id": "...", "full_name": "..." }
+}
+```
+
+`GET /health` can be used to check whether the API process is available.
+Configure MySQL once by copying `.env.example` to `.env` and replacing its
+placeholder values. The `.env` file is ignored by Git and is loaded
+automatically when the backend starts. System environment variables, if set,
+take precedence over `.env` values.
+
 ## MySQL persistence for the Streamlit app
 
 Create the `egyptian_id_ocr.id_ocr_results` table using the supplied database

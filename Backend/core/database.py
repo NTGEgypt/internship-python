@@ -11,10 +11,17 @@ import hashlib
 import json
 import os
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any
 
 import mysql.connector
+from dotenv import load_dotenv
 from mysql.connector import Error
+
+
+# Local development credentials are loaded from Backend/.env if it exists.
+# Existing system environment variables always take precedence.
+load_dotenv(Path(__file__).resolve().parents[1] / ".env")
 
 
 class DatabaseConfigurationError(RuntimeError):
@@ -35,7 +42,7 @@ class MySQLSettings:
 
 
 def load_mysql_settings() -> MySQLSettings:
-    """Load connection settings from environment variables.
+    """Load connection settings from environment variables or ``Backend/.env``.
 
     MYSQL_USER and MYSQL_PASSWORD are intentionally never hard-coded in the
     repository.  MYSQL_HOST, MYSQL_PORT, and MYSQL_DATABASE have safe local
