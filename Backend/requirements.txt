@@ -1,0 +1,10 @@
+opencv-python
+numpy
+torch
+easyocr
+paddleocr
+paddlepaddle
+pytesseract
+ultralytics
+streamlit
+mysql-connector-python
