@@ -1,7 +1,7 @@
 package com.ntg.egyptianNationalIDOCR.services;
 
 import com.ntg.egyptianNationalIDOCR.dtos.IdOcrResultResponse;
-import com.ntg.egyptianNationalIDOCR.entity.IdOcrResult;
+import com.ntg.egyptianNationalIDOCR.entity.IDOcrResult;
 import com.ntg.egyptianNationalIDOCR.repository.IdOcrResultRepository;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +23,7 @@ public class IdOcrResultService {
                 .toList();
     }
 
-    private IdOcrResultResponse toResponse(IdOcrResult result) {
+    private IdOcrResultResponse toResponse(IDOcrResult result) {
         return new IdOcrResultResponse(
                 result.getId(),
                 result.getOriginalFilename(),

@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "id_ocr_results")
-public class IdOcrResult {
+public class IDOcrResult {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -253,16 +253,4 @@ public class IdOcrResult {
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
-}
-
-public enum CaptureQuality {
-    GOOD,
-    BORDERLINE,
-    BAD
-}
-
-public enum ReviewStatus {
-    PENDING,
-    ACCEPTED,
-    REJECTED
 }
