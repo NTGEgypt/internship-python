@@ -74,29 +74,31 @@ async def process_id_image(
         "OCR processing completed in %.1f seconds; saving result to MySQL.",
         time.perf_counter() - request_started_at,
     )
-    try:
-        submission_id = save_ocr_result(
-            result=result,
-            image_bytes=image_bytes,
-            original_filename=image.filename,
-            image_mime_type=image.content_type,
-        )
-    except DatabaseConfigurationError as exc:
-        logger.exception("Database storage is not configured.")
-        raise HTTPException(
-            status_code=503,
-            detail="Result storage is not configured on the server.",
-        ) from exc
-    except DatabaseStorageError as exc:
-        logger.exception("Could not save OCR submission to MySQL.")
-        raise HTTPException(
-            status_code=503,
-            detail="Result storage is temporarily unavailable.",
-        ) from exc
+    # try:
+    #     submission_id = save_ocr_result(
+    #         result=result,
+    #         image_bytes=image_bytes,
+    #         original_filename=image.filename,
+    #         image_mime_type=image.content_type,
+    #     )
+    # except DatabaseConfigurationError as exc:
+    #     logger.exception("Database storage is not configured.")
+    #     raise HTTPException(
+    #         status_code=503,
+    #         detail="Result storage is not configured on the server.",
+    #     ) from exc
+    # except DatabaseStorageError as exc:
+    #     logger.exception("Could not save OCR submission to MySQL.")
+    #     raise HTTPException(
+    #         status_code=503,
+    #         detail="Result storage is temporarily unavailable.",
+    #     ) from exc
 
-    logger.info(
-        "OCR submission #%s saved in %.1f seconds total.",
-        submission_id,
-        time.perf_counter() - request_started_at,
-    )
-    return {"success": True, "submission_id": submission_id, "result": result}
+    # logger.info(
+    #     "OCR submission #%s saved in %.1f seconds total.",
+    #     submission_id,
+    #     time.perf_counter() - request_started_at,
+    # )
+
+    print(result)
+    return {"success": True, "result": result}

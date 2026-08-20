@@ -8,6 +8,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -100,24 +101,7 @@ fun OcrUploadScreen(viewModel: OcrUploadViewModel = viewModel()) {
         )
         Spacer(Modifier.height(28.dp))
 
-        if (state.selectedImage == null) {
-            Button(
-                onClick = ::openCamera,
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                Text("Take photo")
-            }
-            Spacer(Modifier.height(10.dp))
-            OutlinedButton(
-                onClick = {
-                    imagePicker.launch(PickVisualMediaRequest(PickVisualMedia.ImageOnly))
-                },
-                modifier = Modifier.fillMaxWidth(),
-                enabled = !state.isProcessing,
-            ) {
-                Text("Choose image from storage")
-            }
-        } else {
+        if (state.selectedImage != null) {
             Card(modifier = Modifier.fillMaxWidth()) {
                 AsyncImage(
                     model = state.selectedImage,
@@ -128,6 +112,34 @@ fun OcrUploadScreen(viewModel: OcrUploadViewModel = viewModel()) {
                     contentScale = ContentScale.Crop,
                 )
             }
+            Spacer(Modifier.height(16.dp))
+        }
+
+        // Take photo / choose from storage are always available, so the user
+        // can swap out the current image at any point before processing.
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+        ) {
+            Button(
+                onClick = ::openCamera,
+                modifier = Modifier.weight(1f),
+                enabled = !state.isProcessing,
+            ) {
+                Text("Take photo")
+            }
+            OutlinedButton(
+                onClick = {
+                    imagePicker.launch(PickVisualMediaRequest(PickVisualMedia.ImageOnly))
+                },
+                modifier = Modifier.weight(1f),
+                enabled = !state.isProcessing,
+            ) {
+                Text("Choose image")
+            }
+        }
+
+        if (state.selectedImage != null) {
             Spacer(Modifier.height(16.dp))
 
             if (state.isProcessing) {
@@ -140,15 +152,6 @@ fun OcrUploadScreen(viewModel: OcrUploadViewModel = viewModel()) {
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     Text("Process image")
-                }
-                Spacer(Modifier.height(8.dp))
-                OutlinedButton(
-                    onClick = {
-                        imagePicker.launch(PickVisualMediaRequest(PickVisualMedia.ImageOnly))
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    Text("Choose a different image")
                 }
             }
         }

@@ -30,8 +30,8 @@ object OcrApiProvider {
         // is only 10 seconds, so each relevant timeout must be increased.
         .connectTimeout(30, TimeUnit.SECONDS)
         .writeTimeout(1, TimeUnit.MINUTES)
-        .readTimeout(3, TimeUnit.MINUTES)
-        .callTimeout(3, TimeUnit.MINUTES)
+        .readTimeout(6, TimeUnit.MINUTES)
+        .callTimeout(6, TimeUnit.MINUTES)
         .build()
 
     val api: OcrApi by lazy {

@@ -2,6 +2,6 @@
 <!-- Development only: the local OCR API runs on HTTP. Use HTTPS in production. -->
 <network-security-config>
     <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="false">10.0.2.2</domain>
+        <domain includeSubdomains="false">192.168.1.6</domain>
     </domain-config>
 </network-security-config>
