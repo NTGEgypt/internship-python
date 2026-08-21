@@ -1,15 +1,18 @@
-import { useEffect, useState } from "react";
-import { getOcrResults } from "../features/ocr-results/api/ocrResultsApi";
-import type { OcrResult } from "../features/ocr-results/types/ocrResult";
+import { useState } from "react";
 import { OcrResultsTable } from "@/components/OcrResultsTable";
 import ViewOcrResultDialog from "@/components/ViewOcrResultDialog";
+import { useOcrResults } from "../features/ocr-results/hooks/useOcrResults";
+import type { OcrResult } from "../features/ocr-results/types/ocrResult";
 
 export default function OcrResultsPage() {
-  const [results, setResults] = useState<OcrResult[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const {
+    results,
+    loading,
+    error,
+  } = useOcrResults();
 
   const [dialogOpen, setDialogOpen] = useState(false);
+
   const [selectedResult, setSelectedResult] =
     useState<OcrResult | null>(null);
 
@@ -17,21 +20,6 @@ export default function OcrResultsPage() {
     setSelectedResult(result);
     setDialogOpen(true);
   };
-
-  useEffect(() => {
-    async function loadResults() {
-      try {
-        const data = await getOcrResults();
-        setResults(data);
-      } catch {
-        setError("Failed to load OCR results");
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    loadResults();
-  }, []);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -43,7 +31,10 @@ export default function OcrResultsPage() {
 
   return (
     <div>
-      <OcrResultsTable results={results} onRowClick={handleRowClick} />
+      <OcrResultsTable
+        results={results}
+        onRowClick={handleRowClick}
+      />
 
       <ViewOcrResultDialog
         open={dialogOpen}
