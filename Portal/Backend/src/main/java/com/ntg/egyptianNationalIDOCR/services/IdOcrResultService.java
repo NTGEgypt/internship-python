@@ -5,7 +5,9 @@ import com.ntg.egyptianNationalIDOCR.dtos.ReviewRequest;
 import com.ntg.egyptianNationalIDOCR.entity.IDOcrResult;
 import com.ntg.egyptianNationalIDOCR.entity.ReviewStatus;
 import com.ntg.egyptianNationalIDOCR.repository.IdOcrResultRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -46,8 +48,9 @@ public class IdOcrResultService {
                 );
 
         if (result.getReviewStatus() != ReviewStatus.PENDING) {
-            throw new RuntimeException(
-                    "OCR result has already been reviewed"
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Record has already been reviewed"
             );
         }
 
@@ -70,6 +73,22 @@ public class IdOcrResultService {
                 .orElseThrow(() ->
                         new RuntimeException("OCR result not found with id: " + id)
                 );
+
+        if (result.getReviewStatus() != ReviewStatus.PENDING) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Record has already been reviewed"
+            );
+        }
+
+        if (request.getDecisionNote() == null ||
+                request.getDecisionNote().isBlank()) {
+
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "A rejection reason is required"
+            );
+        }
 
         result.setReviewStatus(ReviewStatus.REJECTED);
         result.setReviewedBy("admin");
