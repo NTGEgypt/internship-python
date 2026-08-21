@@ -2,6 +2,7 @@ package com.ntg.egyptianNationalIDOCR.services;
 
 import com.ntg.egyptianNationalIDOCR.dtos.ApiResponse;
 import com.ntg.egyptianNationalIDOCR.dtos.IdOcrResultResponse;
+import com.ntg.egyptianNationalIDOCR.dtos.ImageResponse;
 import com.ntg.egyptianNationalIDOCR.dtos.ReviewRequest;
 import com.ntg.egyptianNationalIDOCR.entity.IDOcrResult;
 import com.ntg.egyptianNationalIDOCR.entity.ReviewStatus;
@@ -69,10 +70,15 @@ public class IdOcrResultService {
         String base64Image = Base64.getEncoder()
                 .encodeToString(result.getCardImage());
 
+        ImageResponse imageResponse = new ImageResponse(
+                result.getImageMimeType(),
+                base64Image
+        );
+
         return new ApiResponse(
                 200,
                 "Image retrieved successfully.",
-                base64Image
+                imageResponse
         );
     }
 
