@@ -1,5 +1,6 @@
 package com.ntg.egyptianNationalIDOCR.controllers;
 
+import com.ntg.egyptianNationalIDOCR.dtos.ApiResponse;
 import com.ntg.egyptianNationalIDOCR.dtos.IdOcrResultResponse;
 import com.ntg.egyptianNationalIDOCR.dtos.ReviewRequest;
 import com.ntg.egyptianNationalIDOCR.services.IdOcrResultService;
@@ -19,22 +20,22 @@ public class IdOcrResultController {
     }
 
     @GetMapping
-    public List<IdOcrResultResponse> getAllResults() {
+    public ApiResponse getAllResults() {
         return service.getAllResults();
     }
 
     @GetMapping("/{id}")
-    public IdOcrResultResponse getResultById(@PathVariable Long id) {
+    public ApiResponse getResultById(@PathVariable Long id) {
         return service.getResultById(id);
     }
 
     @GetMapping("/{id}/image")
-    public ResponseEntity<byte[]> getImage(@PathVariable Long id) {
+    public ApiResponse getImage(@PathVariable Long id) {
         return service.getImage(id);
     }
 
     @PostMapping("/{id}/approve")
-    public IdOcrResultResponse approve(
+    public ApiResponse approve(
             @PathVariable Long id,
             @RequestBody ReviewRequest request
     ) {
@@ -42,7 +43,7 @@ public class IdOcrResultController {
     }
 
     @PostMapping("/{id}/reject")
-    public IdOcrResultResponse reject(
+    public ApiResponse reject(
             @PathVariable Long id,
             @RequestBody ReviewRequest request
     ) {
