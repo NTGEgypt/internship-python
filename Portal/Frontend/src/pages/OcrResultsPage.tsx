@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getOcrResults } from "../features/ocr-results/api/ocrResultsApi";
 import type { OcrResult } from "../features/ocr-results/types/ocrResult";
+import { OcrResultsTable } from "@/components/OcrResultsTable";
 
 export default function OcrResultsPage() {
   const [results, setResults] = useState<OcrResult[]>([]);
@@ -32,11 +33,7 @@ export default function OcrResultsPage() {
 
   return (
     <div>
-      <h1>OCR Results</h1>
-
-      <p>
-        Total records: {results.length}
-      </p>
+      <OcrResultsTable results={results} />
     </div>
   );
 }
