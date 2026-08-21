@@ -30,7 +30,7 @@ export async function reviewOcrResult(
 
   if (!response.ok) {
     throw new Error(
-      data.message || "Review operation failed"
+      data.message || "Something went wrong."
     );
   }
 
