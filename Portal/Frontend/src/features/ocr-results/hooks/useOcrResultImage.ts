@@ -1,13 +1,5 @@
 import { useEffect, useState } from "react";
-
-type ImageResponse = {
-  status: number;
-  message: string;
-  data: {
-    mimeType: string;
-    image: string;
-  };
-};
+import { getOcrResultImage } from "../api/ocrResultImageApi";
 
 export function useOcrResultImage(
   resultId: number | null,
@@ -28,15 +20,7 @@ export function useOcrResultImage(
         setLoading(true);
         setError(null);
 
-        const response = await fetch(
-          `http://localhost:8080/api/ocr-results/${resultId}/image`
-        );
-
-        if (!response.ok) {
-          throw new Error("Failed to retrieve image");
-        }
-
-        const result: ImageResponse = await response.json();
+        const result = await getOcrResultImage(resultId);
 
         const { mimeType, image } = result.data;
 
@@ -47,6 +31,7 @@ export function useOcrResultImage(
             ? err.message
             : "Failed to retrieve image"
         );
+
         setImageUrl(null);
       } finally {
         setLoading(false);
