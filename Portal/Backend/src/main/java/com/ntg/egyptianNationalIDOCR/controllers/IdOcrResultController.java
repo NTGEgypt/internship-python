@@ -1,10 +1,9 @@
 package com.ntg.egyptianNationalIDOCR.controllers;
 
 import com.ntg.egyptianNationalIDOCR.dtos.IdOcrResultResponse;
+import com.ntg.egyptianNationalIDOCR.dtos.ReviewRequest;
 import com.ntg.egyptianNationalIDOCR.services.IdOcrResultService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,5 +20,13 @@ public class IdOcrResultController {
     @GetMapping
     public List<IdOcrResultResponse> getAllResults() {
         return service.getAllResults();
+    }
+
+    @PostMapping("/{id}/approve")
+    public IdOcrResultResponse approve(
+            @PathVariable Long id,
+            @RequestBody ReviewRequest request
+    ) {
+        return service.approve(id, request);
     }
 }

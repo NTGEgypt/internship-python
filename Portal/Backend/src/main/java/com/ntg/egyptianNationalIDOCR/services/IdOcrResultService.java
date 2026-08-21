@@ -1,10 +1,13 @@
 package com.ntg.egyptianNationalIDOCR.services;
 
 import com.ntg.egyptianNationalIDOCR.dtos.IdOcrResultResponse;
+import com.ntg.egyptianNationalIDOCR.dtos.ReviewRequest;
 import com.ntg.egyptianNationalIDOCR.entity.IDOcrResult;
+import com.ntg.egyptianNationalIDOCR.entity.ReviewStatus;
 import com.ntg.egyptianNationalIDOCR.repository.IdOcrResultRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -21,6 +24,34 @@ public class IdOcrResultService {
                 .stream()
                 .map(this::toResponse)
                 .toList();
+    }
+
+    public IdOcrResultResponse approve(Long id, ReviewRequest request) {
+
+        IDOcrResult result = repository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "OCR result not found with id: " + id
+                        )
+                );
+
+        if (result.getReviewStatus() != ReviewStatus.PENDING) {
+            throw new RuntimeException(
+                    "OCR result has already been reviewed"
+            );
+        }
+
+        result.setReviewStatus(ReviewStatus.ACCEPTED);
+
+        result.setReviewedBy("admin");
+
+        result.setReviewedAt(LocalDateTime.now());
+
+        result.setDecisionNote(request.getDecisionNote());
+
+        IDOcrResult savedResult = repository.save(result);
+
+        return toResponse(savedResult);
     }
 
     private IdOcrResultResponse toResponse(IDOcrResult result) {
