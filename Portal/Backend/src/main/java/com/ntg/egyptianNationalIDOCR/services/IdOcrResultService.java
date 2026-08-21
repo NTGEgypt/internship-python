@@ -26,6 +26,16 @@ public class IdOcrResultService {
                 .toList();
     }
 
+    public IdOcrResultResponse getResultById(Long id) {
+
+        IDOcrResult result = repository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("OCR result not found with id: " + id)
+                );
+
+        return toResponse(result);
+    }
+
     public IdOcrResultResponse approve(Long id, ReviewRequest request) {
 
         IDOcrResult result = repository.findById(id)

@@ -22,6 +22,11 @@ public class IdOcrResultController {
         return service.getAllResults();
     }
 
+    @GetMapping("/{id}")
+    public IdOcrResultResponse getResultById(@PathVariable Long id) {
+        return service.getResultById(id);
+    }
+
     @PostMapping("/{id}/approve")
     public IdOcrResultResponse approve(
             @PathVariable Long id,
