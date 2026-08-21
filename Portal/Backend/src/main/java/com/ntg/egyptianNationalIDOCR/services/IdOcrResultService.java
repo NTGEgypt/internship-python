@@ -54,6 +54,23 @@ public class IdOcrResultService {
         return toResponse(savedResult);
     }
 
+    public IdOcrResultResponse reject(Long id, ReviewRequest request) {
+
+        IDOcrResult result = repository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("OCR result not found with id: " + id)
+                );
+
+        result.setReviewStatus(ReviewStatus.REJECTED);
+        result.setReviewedBy("admin");
+        result.setReviewedAt(LocalDateTime.now());
+        result.setDecisionNote(request.getDecisionNote());
+
+        IDOcrResult savedResult = repository.save(result);
+
+        return toResponse(savedResult);
+    }
+
     private IdOcrResultResponse toResponse(IDOcrResult result) {
         return new IdOcrResultResponse(
                 result.getId(),

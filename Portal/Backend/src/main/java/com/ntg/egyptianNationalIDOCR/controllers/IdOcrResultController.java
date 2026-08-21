@@ -29,4 +29,12 @@ public class IdOcrResultController {
     ) {
         return service.approve(id, request);
     }
+
+    @PostMapping("/{id}/reject")
+    public IdOcrResultResponse reject(
+            @PathVariable Long id,
+            @RequestBody ReviewRequest request
+    ) {
+        return service.reject(id, request);
+    }
 }
