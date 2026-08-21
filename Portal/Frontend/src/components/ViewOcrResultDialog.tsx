@@ -12,7 +12,8 @@ import { X } from "lucide-react";
 import type { OcrResult } from "../features/ocr-results/types/ocrResult";
 import { useOcrResultImage } from "../features/ocr-results/hooks/useOcrResultImage";
 import { useOcrReview } from "../features/ocr-results/hooks/useOcrReview";
-
+import RejectOcrResultDialog from "@/components/RejectOcrResultDialog";
+    
 type Props = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -101,7 +102,6 @@ const ViewOcrResultDialog = ({
   result,
 }: Props) => {
   const [rejectDialogOpen, setRejectDialogOpen] = useState(false);
-  const [rejectionReason, setRejectionReason] = useState("");
 
   const {
     imageUrl,
@@ -135,30 +135,23 @@ const ViewOcrResultDialog = ({
 
       onOpenChange(false);
 
-      // Refresh the page/list if needed
       window.location.reload();
     }
   };
 
-  const handleReject = async () => {
-    if (!rejectionReason.trim()) {
-      return;
-    }
-
+  const handleReject = async (reason: string) => {
     const response = await review(
       result.id,
       "reject",
-      rejectionReason
+      reason
     );
 
     if (response) {
       alert("Record rejected successfully.");
 
-      setRejectionReason("");
       setRejectDialogOpen(false);
       onOpenChange(false);
 
-      // Refresh the page/list if needed
       window.location.reload();
     }
   };
@@ -195,9 +188,7 @@ const ViewOcrResultDialog = ({
 
           <div className="space-y-6">
 
-            {/* =========================
-                ID IMAGE
-            ========================== */}
+            {/* ID IMAGE */}
             <section>
               <h3 className="mb-4 text-sm font-semibold uppercase tracking-wide text-blue-700">
                 ID Image
@@ -241,9 +232,7 @@ const ViewOcrResultDialog = ({
               </div>
             </section>
 
-            {/* =========================
-                IDENTITY
-            ========================== */}
+            {/* IDENTITY */}
             <section>
               <h3 className="mb-4 text-sm font-semibold uppercase tracking-wide text-blue-700">
                 Identity Information
@@ -294,9 +283,7 @@ const ViewOcrResultDialog = ({
               </div>
             </section>
 
-            {/* =========================
-                ADDRESS
-            ========================== */}
+            {/* ADDRESS */}
             <section>
               <h3 className="mb-4 text-sm font-semibold uppercase tracking-wide text-blue-700">
                 Address
@@ -310,9 +297,7 @@ const ViewOcrResultDialog = ({
               </div>
             </section>
 
-            {/* =========================
-                OCR & REVIEW
-            ========================== */}
+            {/* OCR & REVIEW */}
             <section>
               <h3 className="mb-4 text-sm font-semibold uppercase tracking-wide text-blue-700">
                 OCR & Review
@@ -377,9 +362,7 @@ const ViewOcrResultDialog = ({
               </div>
             </section>
 
-            {/* =========================
-                DECISION NOTE
-            ========================== */}
+            {/* DECISION NOTE */}
             {result.decisionNote && (
               <section>
                 <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-blue-700">
@@ -394,9 +377,7 @@ const ViewOcrResultDialog = ({
               </section>
             )}
 
-            {/* =========================
-                FILE INFORMATION
-            ========================== */}
+            {/* FILE INFORMATION */}
             <section>
               <h3 className="mb-4 text-sm font-semibold uppercase tracking-wide text-blue-700">
                 File Information
@@ -424,9 +405,7 @@ const ViewOcrResultDialog = ({
               </div>
             </section>
 
-            {/* =========================
-                APPROVE / REJECT
-            ========================== */}
+            {/* APPROVE / REJECT */}
             {isPending && (
               <section className="border-t border-gray-200 pt-5">
 
@@ -444,7 +423,7 @@ const ViewOcrResultDialog = ({
                     type="button"
                     onClick={() => setRejectDialogOpen(true)}
                     disabled={reviewLoading}
-                    className="rounded-lg border cursor-pointer border-red-200 bg-red-50 px-5 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-50"
+                    className="cursor-pointer rounded-lg border border-red-200 bg-red-50 px-5 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     Reject
                   </button>
@@ -453,9 +432,11 @@ const ViewOcrResultDialog = ({
                     type="button"
                     onClick={handleApprove}
                     disabled={reviewLoading}
-                    className="rounded-lg cursor-pointer bg-green-600 px-5 py-2 text-sm font-semibold text-white transition hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-50"
+                    className="cursor-pointer rounded-lg bg-green-600 px-5 py-2 text-sm font-semibold text-white transition hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-50"
                   >
-                    {reviewLoading ? "Processing..." : "Approve"}
+                    {reviewLoading
+                      ? "Processing..."
+                      : "Approve"}
                   </button>
 
                 </div>
@@ -466,81 +447,14 @@ const ViewOcrResultDialog = ({
         </DialogContent>
       </Dialog>
 
-      {/* =========================
-          REJECTION DIALOG
-      ========================== */}
-      <Dialog
+      {/* REJECTION DIALOG */}
+      <RejectOcrResultDialog
         open={rejectDialogOpen}
         onOpenChange={setRejectDialogOpen}
-      >
-        <DialogContent
-          showCloseButton={false}
-          className="max-w-md"
-        >
-          <DialogHeader className="flex flex-row items-center justify-between">
-            <DialogTitle className="text-lg font-semibold text-red-700">
-              Reject OCR Result
-            </DialogTitle>
-
-            <X
-              className="h-5 w-5 cursor-pointer text-gray-500 hover:text-gray-900"
-              onClick={() => setRejectDialogOpen(false)}
-            />
-          </DialogHeader>
-
-          <div className="space-y-4">
-
-            <p className="text-sm text-gray-500">
-              Please provide a reason for rejecting this ID.
-            </p>
-
-            <textarea
-              value={rejectionReason}
-              onChange={(e) =>
-                setRejectionReason(e.target.value)
-              }
-              placeholder="Enter rejection reason..."
-              rows={4}
-              disabled={reviewLoading}
-              className="w-full resize-none rounded-lg border border-gray-300 p-3 text-sm outline-none focus:border-red-400 focus:ring-2 focus:ring-red-100 disabled:bg-gray-100"
-            />
-
-            {reviewError && (
-              <p className="text-sm text-red-600">
-                {reviewError}
-              </p>
-            )}
-
-            <div className="flex justify-end gap-3">
-
-              <button
-                type="button"
-                onClick={() => setRejectDialogOpen(false)}
-                disabled={reviewLoading}
-                className="rounded-lg border cursor-pointer border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
-              >
-                Cancel
-              </button>
-
-              <button
-                type="button"
-                onClick={handleReject}
-                disabled={
-                  reviewLoading ||
-                  !rejectionReason.trim()
-                }
-                className="rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold cursor-pointer text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                {reviewLoading
-                  ? "Rejecting..."
-                  : "Confirm Reject"}
-              </button>
-
-            </div>
-
-          </div>
-        </DialogContent>
-      </Dialog>
+        onReject={handleReject}
+        loading={reviewLoading}
+        error={reviewError}
+      />
     </>
   );
 };
