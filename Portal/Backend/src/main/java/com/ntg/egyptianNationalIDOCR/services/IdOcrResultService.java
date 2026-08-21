@@ -6,6 +6,8 @@ import com.ntg.egyptianNationalIDOCR.entity.IDOcrResult;
 import com.ntg.egyptianNationalIDOCR.entity.ReviewStatus;
 import com.ntg.egyptianNationalIDOCR.repository.IdOcrResultRepository;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -36,6 +38,23 @@ public class IdOcrResultService {
                 );
 
         return toResponse(result);
+    }
+
+    public ResponseEntity<byte[]> getImage(Long id) {
+
+        IDOcrResult result = repository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("OCR result not found with id: " + id)
+                );
+
+        MediaType mediaType = MediaType.parseMediaType(
+                result.getImageMimeType()
+        );
+
+        return ResponseEntity
+                .ok()
+                .contentType(mediaType)
+                .body(result.getCardImage());
     }
 
     public IdOcrResultResponse approve(Long id, ReviewRequest request) {

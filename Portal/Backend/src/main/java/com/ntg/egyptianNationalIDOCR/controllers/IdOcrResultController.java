@@ -3,6 +3,7 @@ package com.ntg.egyptianNationalIDOCR.controllers;
 import com.ntg.egyptianNationalIDOCR.dtos.IdOcrResultResponse;
 import com.ntg.egyptianNationalIDOCR.dtos.ReviewRequest;
 import com.ntg.egyptianNationalIDOCR.services.IdOcrResultService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +26,11 @@ public class IdOcrResultController {
     @GetMapping("/{id}")
     public IdOcrResultResponse getResultById(@PathVariable Long id) {
         return service.getResultById(id);
+    }
+
+    @GetMapping("/{id}/image")
+    public ResponseEntity<byte[]> getImage(@PathVariable Long id) {
+        return service.getImage(id);
     }
 
     @PostMapping("/{id}/approve")
