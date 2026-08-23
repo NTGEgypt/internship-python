@@ -1,0 +1,14 @@
+path: /Users/youssifabodahb/Downloads/OCR_PROJECT_FOR_AGENT/egyptian_id_ocr/data/yolo_seg_dataset
+train: images/train
+val: images/val
+
+names:
+  0: national_id
+  1: name
+  2: date_of_birth
+  3: gender
+  4: birth_governorate
+  5: profession
+  6: address
+  7: barcode
+  8: photo
