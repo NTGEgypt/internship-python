@@ -18,7 +18,7 @@ android {
 
         // Android emulator access to a backend running on the development PC.
         // Change this value to the PC's LAN IP when testing on a physical device.
-        buildConfigField("String", "API_BASE_URL", "\"http://192.168.1.6:8000/\"")
+        buildConfigField("String", "API_BASE_URL", "\"http://192.168.68.114:8000/\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -58,6 +58,7 @@ dependencies {
     implementation(libs.androidx.camera.camera2)
     implementation(libs.androidx.camera.lifecycle)
     implementation(libs.androidx.camera.view)
+    implementation("org.opencv:opencv:4.9.0")
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
